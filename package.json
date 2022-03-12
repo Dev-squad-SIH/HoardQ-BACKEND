@@ -1,0 +1,32 @@
+{
+  "name": "sih22-backend",
+  "version": "1.0.0",
+  "description": "\"Smart India Hanckathon Project\"",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "dev":"nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dev-squad-SIH/SIH22-BACKEND.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dev-squad-SIH/SIH22-BACKEND/issues"
+  },
+  "homepage": "https://github.com/Dev-squad-SIH/SIH22-BACKEND#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.6",
+    "nodemailer": "^6.7.2",
+    "nodemon": "^2.0.15"
+  }
+}
