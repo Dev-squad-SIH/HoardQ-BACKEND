@@ -17,9 +17,20 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             question.solution = solution;
             question.answer = answer;
             question.image = image;
-            
-            await question.save();
-            return res.status(200).json({message:"Question added successfully"});
+            console.log(option);
+            if((questionType == "MCQ" && option[0])||
+            (questionType == "Match" && option[3])||
+            (questionType == "FillUps" && option[1])||
+            (questionType == "true/false" && option[2])||
+            (questionType == "descriptive" && (option == null || option == undefined || !option) ))
+            {
+                await question.save();
+                return res.status(200).json({message:"Question added successfully"});
+            }
+            else{
+                return res.status(400).json({message:"Question type and options doesn't match"});
+            }
+            // return res.status(400).json({message:"Question not added"});
         }
     }catch(error)
     {
