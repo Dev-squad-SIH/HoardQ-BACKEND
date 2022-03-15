@@ -8,30 +8,26 @@ const questionSchema = mongoose.Schema({
   },
   difficulty: {
     type: String,
-    required: [true, "Please give question difficulty level"],
+    required: [false, "Please give question difficulty level"],
     enum: ["easy", "medium", "hard"],
   },
   topics: [
     {
-      topic: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required:true
     },
   ],
   option: {
     options:[
       {
-        optionDesc:{
-          type:String
-        }
+        type:String
       }
     ],
     fillUp:{
       type:String
     },
     boolField:{
-      type:boolean
+      type:Boolean
     },
     matchOptions:[
       {
@@ -51,19 +47,27 @@ const questionSchema = mongoose.Schema({
   questionType: {
     type: String,
     enum: ["Match","FillUps","MCQ","descriptive","true/false"],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+    required:true
   },
   solution: {
     type: String,
-    required: true,
   },
   answer: {
     type: String,
     required: true,
   },
-});
+  image:{
+    type:String
+  },
+  verified:{
+    type:Boolean,
+    default:false
+  },
+  verifiedBy:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Expert',
+  },
+
+},{ timestamps: true });
 
 module.exports = mongoose.model("Question", questionSchema);
