@@ -8,30 +8,26 @@ const questionSchema = mongoose.Schema({
   },
   difficulty: {
     type: String,
-    required: [true, "Please give question difficulty level"],
+    required: [false, "Please give question difficulty level"],
     enum: ["easy", "medium", "hard"],
   },
   topics: [
     {
-      topic: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required:true
     },
   ],
   option: {
     options:[
       {
-        optionDesc:{
-          type:String
-        }
+        type:String
       }
     ],
     fillUp:{
       type:String
     },
     boolField:{
-      type:boolean
+      type:Boolean
     },
     matchOptions:[
       {
@@ -51,6 +47,7 @@ const questionSchema = mongoose.Schema({
   questionType: {
     type: String,
     enum: ["Match","FillUps","MCQ","descriptive","true/false"],
+    required:true
   },
   createdAt: {
     type: Date,
@@ -58,7 +55,6 @@ const questionSchema = mongoose.Schema({
   },
   solution: {
     type: String,
-    required: true,
   },
   answer: {
     type: String,
