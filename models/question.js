@@ -60,6 +60,17 @@ const questionSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  image:{
+    type:String
+  },
+  verified:{
+    type:Boolean,
+    default:false
+  },
+  verifiedBy:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Expert',
+  }
 });
 
 module.exports = mongoose.model("Question", questionSchema);
