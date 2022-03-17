@@ -2,7 +2,7 @@ const express=require('express');
 const app = express();
 const dotenv=require('dotenv');
 const connectToDB = require('./config/database');
-dotenv.config({path:'./config/config.env'});
+dotenv.config({path:'./config/.env'});
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const apiRouter = require('./api/api');
