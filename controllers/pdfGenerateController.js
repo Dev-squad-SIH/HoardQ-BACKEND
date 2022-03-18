@@ -16,10 +16,36 @@ exports.pdfGenerate = async (req, res) => {
       descriptivesQuestion = [],
       TFQuestions = [];
 
+    var difficultyLevel;
     for (i = 0; i < Mcqs; i++) {
+      if(difficulty=="easy"){
+      if (i < 0.4 * Mcqs) {
+        difficultyLevel = "easy";
+      } else if (i > 0.4 * Mcqs && i < 0.7 * Mcqs) {
+        difficultyLevel = "medium";
+      } else {
+        difficultyLevel = "hard";
+      }
+    }else if(difficulty=="medium"){
+        if (i < 0.3 * Mcqs) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 * Mcqs && i < 0.7 * Mcqs) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+    }else{
+      if (i < 0.3 * Mcqs) {
+        difficultyLevel = "easy";
+      } else if (i > 0.3 * Mcqs && i < 0.6 * Mcqs) {
+        difficultyLevel = "medium";
+      } else {
+        difficultyLevel = "hard";
+      }
+    }
       var random = Math.floor(Math.random() * 5);
       const question = await Question.findOne({
-        difficulty: "easy",
+        difficulty: difficultyLevel,
         questionType: "MCQ",
       }).skip(random);
       var findQues = McqQuestions.find((element) => element == question);
@@ -30,9 +56,35 @@ exports.pdfGenerate = async (req, res) => {
       }
     }
     for (i = 0; i < descriptives; i++) {
+      if(difficulty=="easy"){
+        if (i < 0.4 * descriptives) {
+          difficultyLevel = "easy";
+        } else if (i > 0.4 * descriptives && i < 0.7 * descriptives) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else if(difficulty=="medium"){
+        if (i < 0.3 * descriptives) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 * descriptives && i < 0.7 * descriptives) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else{
+        if (i < 0.3 * descriptives) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 * descriptives && i < 0.6 * descriptives) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }
+    
       var random = Math.floor(Math.random() * 5);
       const question = await Question.findOne({
-        difficulty: "easy",
+        difficulty: difficultyLevel,
         questionType: "descriptive",
       }).skip(random);
       var findQues = descriptivesQuestion.find(
@@ -47,9 +99,35 @@ exports.pdfGenerate = async (req, res) => {
       }
     }
     for (i = 0; i < matches; i++) {
+      if(difficulty=="easy"){
+        if (i < 0.4 * matches) {
+          difficultyLevel = "easy";
+        } else if (i > 0.4 * matches && i < 0.7 * matches) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else if(difficulty=="medium"){
+        if (i < 0.3 * matches) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 * matches && i < 0.7 * matches) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else{
+        if (i < 0.3 * matches) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 * matches && i < 0.6 * matches) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }
+      
       var random = Math.floor(Math.random() * 5);
       const question = await Question.findOne({
-        difficulty: "easy",
+        difficulty: difficultyLevel,
         questionType: "Match",
       }).skip(random);
       var findQues = MatchQuestions.find((element) => element == question);
@@ -63,9 +141,35 @@ exports.pdfGenerate = async (req, res) => {
     }
 
     for (i = 0; i < TF; i++) {
+      if(difficulty=="easy"){
+        if (i < 0.4 * TF) {
+          difficultyLevel = "easy";
+        } else if (i > 0.4 *TF && i < 0.7 *TF) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else if(difficulty=="medium"){
+        if (i < 0.3 * TF) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 *TF && i < 0.7 *TF) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }else{
+        if (i < 0.3 * TF) {
+          difficultyLevel = "easy";
+        } else if (i > 0.3 *TF && i < 0.6 *TF) {
+          difficultyLevel = "medium";
+        } else {
+          difficultyLevel = "hard";
+        }
+      }
+      
       var random = Math.floor(Math.random() * 5);
       const question = await Question.findOne({
-        difficulty: "easy",
+        difficulty: difficultyLevel,
         questionType: "true/false",
       }).skip(random);
       var findQues = TFQuestions.find((element) => element == question);
@@ -80,7 +184,7 @@ exports.pdfGenerate = async (req, res) => {
 
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream("output.pdf"));
-
+    doc.pipe(res);
     //For MCQType:
 
     doc.text("MCQ Section", {
@@ -143,7 +247,11 @@ exports.pdfGenerate = async (req, res) => {
       question.option.matchOptions.map((option) => {
         doc
           .text(
-            `${j + 1}.${ option.row.lhs }                                                      ${ option.row.rhs }`
+            `${j + 1}.${
+              option.row.lhs
+            }                                                      ${
+              option.row.rhs
+            }`
           )
           .moveDown();
         j++;
