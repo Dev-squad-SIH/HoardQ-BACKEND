@@ -6,14 +6,14 @@ const jwt = require('jsonwebtoken');
 // to let the Expert login
 loginRouter.post('/', async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!name || !password) {
+    if (!email || !password) {
       return res.status(404).json({
         message: 'Fill all the fields!',
       });
     }
-    const expert = await Expert.findOne({name: name});
+    const expert = await Expert.findOne({email: email});
 
     // when Expert not found
     if (!expert) {
@@ -27,8 +27,7 @@ loginRouter.post('/', async (req, res) => {
       const token = jwt.sign(
         {
           _id: expert._id,
-          name: expert.name,
-          name: expert.name,
+          email: expert.email,
         },
         process.env.TOKEN_SECRET,
         { expiresIn: '168h' } // 7d
