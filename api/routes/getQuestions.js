@@ -78,5 +78,19 @@ getQuestionRouter.post('/ByType/NumberOfQuestions',async(req,res)=>{
         return res.status(500).json({message:"Server error"});
     }
 })
+getQuestionRouter.post('/ByTopic',async(req,res)=>{
+  try{
+    const {Topic} = req.body;
+    let question = await Question.find({Topics:Topic});
+    
+    if(question)
+      return res.status(200).json({question:question});
+    return res.status(400).json({message:"Questions not found"});
+  }catch(error)
+  {
+      console.log(error.message);
+      return res.status(500).json({message:"Server error"});
+  }
+})
 
 module.exports = getQuestionRouter;

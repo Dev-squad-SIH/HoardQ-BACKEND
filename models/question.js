@@ -17,6 +17,12 @@ const questionSchema = mongoose.Schema({
       required:true
     },
   ],
+  subjects: [
+    {
+      type: String,
+      required:true
+    },
+  ],
   option: {
     options:[
       {
