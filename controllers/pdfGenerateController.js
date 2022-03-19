@@ -4,13 +4,8 @@ const fs = require("fs");
 
 exports.pdfGenerate = async (req, res) => {
   try {
-    const matches = req.query.Matches;
-    const descriptives = req.query.descriptives;
-    const Mcqs = req.query.MCQs;
-    const difficulty = req.query.difficulty;
-    console.log(matches, descriptives, Mcqs, difficulty);
-    const TF = req.query.TF;
-
+    const {matches , descriptives , Mcqs , difficulty, TF}= req.body;
+  
     var McqQuestions = [],
       MatchQuestions = [],
       descriptivesQuestion = [],
