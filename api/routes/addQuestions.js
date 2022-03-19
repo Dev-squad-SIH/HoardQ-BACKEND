@@ -4,7 +4,7 @@ const Question = require('../../models/question.js');
 addQuestionRouter.post('/add-question',async(req,res)=>{
     try{
         const {description,difficulty,topics,option,questionType,solution,answer,image } = req.body;
-		if (!description || !option || !topics || !questionType || !answer ) {
+		if (!description || !topics || !questionType || !answer ) {
 			return res.status(400).json({ message: "Fill all required details" });
 		}
         else{
@@ -17,12 +17,11 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             question.solution = solution;
             question.answer = answer;
             question.image = image;
-            console.log(option);
-            if((questionType == "MCQ" && option.options)||
+            if(((questionType == "descriptive" && (option == null || option == undefined || !option) ))||
+            (questionType == "MCQ" && option.options)||
             (questionType == "Match" && option.matchOptions)||
-            (questionType == "FillUps" && option[1])||
-            (questionType == "true/false" && option[2])||
-            (questionType == "descriptive" && Object.keys(option).length === 0 ))
+            (questionType == "FillUps" && option.fillUp)||
+            (questionType == "true/false" && option.boolField))
             {
                 await question.save();
                 return res.status(200).json({message:"Question added successfully"});
