@@ -5,11 +5,14 @@ const connectToDB = require('./config/database');
 dotenv.config({path:'./config/.env'});
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 const apiRouter = require('./api/api');
 const authRouter = require('./api/auth');
 
+
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
+
 
 connectToDB();
 app.listen(process.env.PORT,()=>{

@@ -18,11 +18,11 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             question.answer = answer;
             question.image = image;
             console.log(option);
-            if((questionType == "MCQ" && option[0])||
-            (questionType == "Match" && option[3])||
+            if((questionType == "MCQ" && option.options)||
+            (questionType == "Match" && option.matchOptions)||
             (questionType == "FillUps" && option[1])||
             (questionType == "true/false" && option[2])||
-            (questionType == "descriptive" && (option == null || option == undefined || !option) ))
+            (questionType == "descriptive" && Object.keys(option).length === 0 ))
             {
                 await question.save();
                 return res.status(200).json({message:"Question added successfully"});
