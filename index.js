@@ -8,11 +8,11 @@ app.use(express.json());
 
 const apiRouter = require('./api/api');
 const authRouter = require('./api/auth');
-const pdfGenerate=require('./api/routes/pdfGenerateRoute');
+
 
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
-app.use('/api/v1',pdfGenerate);
+
 
 connectToDB();
 app.listen(process.env.PORT,()=>{
