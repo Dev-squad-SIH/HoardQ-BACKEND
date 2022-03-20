@@ -4,7 +4,7 @@ const Expert = require('../../models/expert.js');
 
 expertQuestionsRouter.get('/:id',async(req,res)=>{
     try{
-      const expert = await Expert.findById(req.params.id).populate('questionsAssigned');
+      const expert = await Expert.findById(req.params.id).populate('questionsAssigned').select('-password');
       if(expert)
         return res.status(200).json({expert:expert});
       return res.status(400).json({message:"Questions not found"});
