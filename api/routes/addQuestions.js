@@ -4,7 +4,7 @@ const Expert = require('../../models/expert.js');
 
 addQuestionRouter.post('/add-question',async(req,res)=>{
     try{
-        const {description,difficulty,subjects,option,questionType,solution,answer,image } = req.body;
+        const {description,difficulty,subject,option,questionType,solution,answer,image } = req.body;
 		if (!description || !subjects || !questionType || !answer ) {
 			return res.status(400).json({ message: "Fill all required details" });
 		}
@@ -12,7 +12,7 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             const question = new Question();
             question.description = description;
             question.difficulty = difficulty;
-            question.subjects = subjects;
+            question.subject = subject;
             question.option = option;
             question.questionType = questionType;
             question.solution = solution;
@@ -26,8 +26,8 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             {
                 await question.save();
 
-                let subjects = question.subjects;
-                let experts = await Expert.find({subjects:{$in: subjects}});
+                let subject = question.subject;
+                let experts = await Expert.find({subjects:{$in: subject}});
                 let min=experts[0].questionsAssigned.length ,index=0,i=0;
                 for(i=0;i<experts.length;i++)
                 {
