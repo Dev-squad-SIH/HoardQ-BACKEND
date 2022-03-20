@@ -1,9 +1,9 @@
-const expertDetailRouter = require("express").Router();
+const expertDetailsRouter = require("express").Router();
 const Expert = require("../../models/expert.js");
 
-expertDetailRouter.get("/ById/:id", async (req, res) => {
+expertDetailsRouter.get("/ById/:id", async (req, res) => {
   try {
-    const expert = Expert.findById(req.params.id);
+    const expert = await Expert.findById(req.params.id);
     if (expert) return res.status(200).json({ expert: expert });
     return res.status(400).json({ message: "Expert not founnd" });
   } catch (error) {
@@ -12,4 +12,4 @@ expertDetailRouter.get("/ById/:id", async (req, res) => {
   }
 });
 
-module.exports = expertDetailRouter;
+module.exports = expertDetailsRouter;
