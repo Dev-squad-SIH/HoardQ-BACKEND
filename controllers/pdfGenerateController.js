@@ -182,14 +182,24 @@ exports.pdfGenerate = async (req, res) => {
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream("output.pdf"));
     doc.pipe(res);
+
+    const doc1=new PDFDocument();
+    doc1.pipe(fs.createWriteStream("Solutions.pdf"));
+    doc1.pipe(res);
+
     //For MCQType:
 
     doc.text("MCQ Section", {
       width: 410,
       align: "center",
     });
-
     doc.moveDown();
+
+    doc1.text("MCQ Section Solutions",{
+      width: 410,
+      align: "center",
+    })
+   doc1.moveDown();
 
     var i = 0;
     McqQuestions.map((question) => {
@@ -202,17 +212,43 @@ exports.pdfGenerate = async (req, res) => {
       });
       i++;
     });
+    i=0;
+    McqQuestions.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
+      i++;
+    });
 
     //For descriptives:-
+
     doc.text("Descriptive Section", {
       width: 410,
       align: "center",
     });
-
+   
     doc.moveDown();
+
+    doc1.text("Descriptive Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+   
+    doc1.moveDown();
     i = 0;
     descriptivesQuestion.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
+      i++;
+    });
+
+    i = 0;
+    descriptivesQuestion.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
       i++;
     });
 
@@ -223,9 +259,26 @@ exports.pdfGenerate = async (req, res) => {
     });
 
     doc.moveDown();
+    
+    doc1.text("True/False Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+
+    doc1.moveDown();
+
     i = 0;
     TFQuestionQuestion.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
+      i++;
+    });
+
+    i = 0;
+    TFQuestionQuestion.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
       i++;
     });
 
@@ -236,8 +289,15 @@ exports.pdfGenerate = async (req, res) => {
     });
 
     doc.moveDown();
-    i = 0;
 
+    doc1.text("Matching Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+
+    doc1.moveDown();
+
+    i = 0;
     MatchQuestions.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
       j = 0;
@@ -255,6 +315,16 @@ exports.pdfGenerate = async (req, res) => {
       });
       i++;
     });
+
+    i=0;
+    MatchQuestions.map((question)=>{
+      doc1.text(`Ans${i+1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
+      i++;
+    })
+    doc1.end();
     doc.end();
   } catch (err) {
     console.log(err);
