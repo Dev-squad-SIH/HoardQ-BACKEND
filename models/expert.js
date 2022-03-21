@@ -30,4 +30,4 @@ const expertSchema = mongoose.Schema({
   }
 },{ timestamps: true });
 
-module.exports = mongoose.model("expert", expertSchema);
+module.exports = mongoose.model("Expert", expertSchema);
