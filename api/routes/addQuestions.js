@@ -1,30 +1,45 @@
 const addQuestionRouter = require('express').Router();
 const Question = require('../../models/question.js');
+const Expert = require('../../models/expert.js');
 
 addQuestionRouter.post('/add-question',async(req,res)=>{
     try{
-        const {description,difficulty,topics,option,questionType,solution,answer,image } = req.body;
-		if (!description || !option || !topics || !questionType || !answer ) {
+        const {description,difficulty,subject,option,questionType,solution,answer,image } = req.body;
+		if (!description || !subjects || !questionType || !answer ) {
 			return res.status(400).json({ message: "Fill all required details" });
 		}
         else{
             const question = new Question();
             question.description = description;
             question.difficulty = difficulty;
-            question.topics = topics;
+            question.subject = subject;
             question.option = option;
             question.questionType = questionType;
             question.solution = solution;
             question.answer = answer;
             question.image = image;
-            console.log(option);
-            if((questionType == "MCQ" && option.options)||
+            if(((questionType == "descriptive" && (option == null || option == undefined || !option) ))||
+            (questionType == "MCQ" && option.options)||
             (questionType == "Match" && option.matchOptions)||
-            (questionType == "FillUps" && option[1])||
-            (questionType == "true/false" && option[2])||
-            (questionType == "descriptive" && Object.keys(option).length === 0 ))
+            (questionType == "FillUps" && option.fillUp)||
+            (questionType == "true/false" && option.boolField))
             {
                 await question.save();
+
+                let subject = question.subject;
+                let experts = await Expert.find({subjects:{$in: subject}});
+                let min=experts[0].questionsAssigned.length ,index=0,i=0;
+                for(i=0;i<experts.length;i++)
+                {
+                    if(experts[i].questionsAssigned.length < min)
+                    {
+                        index = i;
+                        min = experts[i].questionsAssigned.length;
+                    }
+                }
+
+                experts[index].questionsAssigned.push( question._id);
+                await experts[index].save();
                 return res.status(200).json({message:"Question added successfully"});
             }
             else{
