@@ -4,7 +4,7 @@ const fs = require("fs");
 
 exports.pdfGenerate = async (req, res) => {
   try {
-    const {matches , descriptives , Mcqs , difficulty, TF}= req.body;
+    const {matches , descriptives , Mcqs , difficulty, TF,topics}= req.body;
   
     var McqQuestions = [],
       MatchQuestions = [],
@@ -42,16 +42,18 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "MCQ",
+        topics:topics
       }).skip(random);
-      console.log(question);
+      // console.log(question);
       var findQues = McqQuestions.find((element) => element == question);
       if (findQues == undefined) {
+        if(question!=null){
         McqQuestions.push(question);
+        }
       } else {
         i--;
       }
     }
-    // console.log(McqQuestions);
     for (i = 0; i < descriptives; i++) {
       if(difficulty=="easy"){
         if (i <= 0.4 * descriptives) {
@@ -83,6 +85,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "descriptive",
+        topics:topics
       }).skip(random);
       var findQues = descriptivesQuestion.find(
         (element) => element == question
@@ -126,6 +129,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "Match",
+        topics:topics
       }).skip(random);
       var findQues = MatchQuestions.find((element) => element == question);
       if (findQues == undefined) {
@@ -168,6 +172,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "true/false",
+        topics:topics
       }).skip(random);
       var findQues = TFQuestions.find((element) => element == question);
       if (findQues == undefined) {
@@ -268,13 +273,13 @@ exports.pdfGenerate = async (req, res) => {
     doc1.moveDown();
 
     i = 0;
-    TFQuestionQuestion.map((question) => {
+    TFQuestions.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
       i++;
     });
 
     i = 0;
-    TFQuestionQuestion.map((question) => {
+    TFQuestions.map((question) => {
       doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
       if(question.solution){
         doc1.text(`Solution:${question.solution}`).moveDown();
