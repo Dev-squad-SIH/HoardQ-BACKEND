@@ -24,6 +24,6 @@ const expertSchema = mongoose.Schema({
   OTP:{
       type:Number,
   }
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model("expert", expertSchema);
