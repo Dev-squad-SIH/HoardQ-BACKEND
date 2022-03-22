@@ -13,8 +13,7 @@ loginRouter.post('/', async (req, res) => {
         message: 'Fill all the fields!',
       });
     }
-    const expert = await Expert.findOne({email: email}).deselect('password');
-
+    const expert = await Expert.findOne({email: email})
     // when Expert not found
     if (!expert) {
       return res.status(404).json({

@@ -4,12 +4,11 @@ const questionSchema = mongoose.Schema({
   description: {
     type: String,
     required: [true, "Question Description is required"],
-    minLength: 10,
   },
   difficulty: {
     type: String,
     required: [false, "Please give question difficulty level"],
-    enum: ["easy", "medium", "hard"],
+    enum: ["Easy", "Medium", "Hard"],
   },
   topics: [
     {
@@ -34,7 +33,7 @@ const questionSchema = mongoose.Schema({
     boolField:[{
       type:Boolean
     }],
-    matchOptions:[
+    matchOptions:
       {
          lhs:[{
            type:String,
@@ -46,7 +45,7 @@ const questionSchema = mongoose.Schema({
         }]
       
       }
-    ]
+    
   },
   questionType: {
     type: String,
