@@ -49,10 +49,6 @@ const questionSchema = mongoose.Schema({
     enum: ["Match","FillUps","MCQ","descriptive","true/false"],
     required:true
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
   solution: {
     type: String,
   },
@@ -70,7 +66,8 @@ const questionSchema = mongoose.Schema({
   verifiedBy:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Expert',
-  }
-});
+  },
+
+},{ timestamps: true });
 
 module.exports = mongoose.model("Question", questionSchema);
