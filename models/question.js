@@ -31,27 +31,26 @@ const questionSchema = mongoose.Schema({
     fillUp:{
       type:String
     },
-    boolField:{
+    boolField:[{
       type:Boolean
-    },
+    }],
     matchOptions:[
       {
-       row:{
-         lhs:{
+         lhs:[{
            type:String,
            required:true
-         },
-         rhs:{
+         }],
+         rhs:[{
            type:String,
            required:true
-         }
-       }
+        }]
+      
       }
     ]
   },
   questionType: {
     type: String,
-    enum: ["Match","FillUps","MCQ","descriptive","true/false"],
+    enum: ["Matches","FillUps","MCQs","descriptive","True/False"],
     required:true
   },
   solution: {

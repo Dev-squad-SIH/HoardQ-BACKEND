@@ -6,12 +6,13 @@ const addQuestionRouter = require('./routes/addQuestions.js');
 const getQuestionRouter = require('./routes/getQuestions.js');
 const expertDetailsRouter = require('./routes/expertDetails.js');
 const expertQuestionsRouter = require('./routes/getExpertQuestions.js');
+const subjectProviderRouter = require('./routes/getSubjectProvider')
 api.use('/expertQuestions',expertQuestionsRouter);
 api.use('/expertDetails',expertDetailsRouter);
 api.use('/questions',addQuestionRouter);
 api.use('/pdfGenerate',pdfGenerate);
 api.use('/get-questions',getQuestionRouter);
 api.use('/getExpertQuestions',getExpertQuestions);
-
+api.use('/getSubjectProvider',subjectProviderRouter)
 
 module.exports = api;

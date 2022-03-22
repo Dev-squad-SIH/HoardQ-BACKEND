@@ -5,7 +5,7 @@ const Expert = require('../../models/expert.js');
 addQuestionRouter.post('/add-question',async(req,res)=>{
     try{
         const {description,difficulty,subject,option,questionType,solution,answer,image } = req.body;
-		if (!description || !subjects || !questionType || !answer ) {
+		if (!description || !subject || !questionType || !answer ) {
 			return res.status(400).json({ message: "Fill all required details" });
 		}
         else{
@@ -19,10 +19,10 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
             question.answer = answer;
             question.image = image;
             if(((questionType == "descriptive" && (option == null || option == undefined || !option) ))||
-            (questionType == "MCQ" && option.options)||
-            (questionType == "Match" && option.matchOptions)||
+            (questionType == "MCQs" && option.options)||
+            (questionType == "Matches" && option.matchOptions)||
             (questionType == "FillUps" && option.fillUp)||
-            (questionType == "true/false" && option.boolField))
+            (questionType == "True/False" && option.boolField))
             {
                 await question.save();
 

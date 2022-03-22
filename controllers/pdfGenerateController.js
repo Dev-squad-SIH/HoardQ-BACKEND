@@ -4,7 +4,7 @@ const fs = require("fs");
 
 exports.pdfGenerate = async (req, res) => {
   try {
-    const {matches , descriptives , Mcqs , difficulty, TF}= req.body;
+    const {matches , descriptives , Mcqs , difficulty, TF,topics}= req.body;
   
     var McqQuestions = [],
       MatchQuestions = [],
@@ -42,16 +42,18 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "MCQ",
+        topics:topics
       }).skip(random);
-      console.log(question);
+      // console.log(question);
       var findQues = McqQuestions.find((element) => element == question);
       if (findQues == undefined) {
+        if(question!=null){
         McqQuestions.push(question);
+        }
       } else {
         i--;
       }
     }
-    // console.log(McqQuestions);
     for (i = 0; i < descriptives; i++) {
       if(difficulty=="easy"){
         if (i <= 0.4 * descriptives) {
@@ -83,6 +85,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "descriptive",
+        topics:topics
       }).skip(random);
       var findQues = descriptivesQuestion.find(
         (element) => element == question
@@ -126,6 +129,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "Match",
+        topics:topics
       }).skip(random);
       var findQues = MatchQuestions.find((element) => element == question);
       if (findQues == undefined) {
@@ -168,6 +172,7 @@ exports.pdfGenerate = async (req, res) => {
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "true/false",
+        topics:topics
       }).skip(random);
       var findQues = TFQuestions.find((element) => element == question);
       if (findQues == undefined) {
@@ -182,14 +187,24 @@ exports.pdfGenerate = async (req, res) => {
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream("output.pdf"));
     doc.pipe(res);
+
+    const doc1=new PDFDocument();
+    doc1.pipe(fs.createWriteStream("Solutions.pdf"));
+    doc1.pipe(res);
+
     //For MCQType:
 
     doc.text("MCQ Section", {
       width: 410,
       align: "center",
     });
-
     doc.moveDown();
+
+    doc1.text("MCQ Section Solutions",{
+      width: 410,
+      align: "center",
+    })
+   doc1.moveDown();
 
     var i = 0;
     McqQuestions.map((question) => {
@@ -202,17 +217,43 @@ exports.pdfGenerate = async (req, res) => {
       });
       i++;
     });
+    i=0;
+    McqQuestions.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
+      i++;
+    });
 
     //For descriptives:-
+
     doc.text("Descriptive Section", {
       width: 410,
       align: "center",
     });
-
+   
     doc.moveDown();
+
+    doc1.text("Descriptive Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+   
+    doc1.moveDown();
     i = 0;
     descriptivesQuestion.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
+      i++;
+    });
+
+    i = 0;
+    descriptivesQuestion.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
       i++;
     });
 
@@ -223,9 +264,26 @@ exports.pdfGenerate = async (req, res) => {
     });
 
     doc.moveDown();
+    
+    doc1.text("True/False Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+
+    doc1.moveDown();
+
     i = 0;
-    TFQuestionQuestion.map((question) => {
+    TFQuestions.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
+      i++;
+    });
+
+    i = 0;
+    TFQuestions.map((question) => {
+      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
       i++;
     });
 
@@ -236,8 +294,15 @@ exports.pdfGenerate = async (req, res) => {
     });
 
     doc.moveDown();
-    i = 0;
 
+    doc1.text("Matching Section Solutions", {
+      width: 410,
+      align: "center",
+    });
+
+    doc1.moveDown();
+
+    i = 0;
     MatchQuestions.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
       j = 0;
@@ -255,6 +320,16 @@ exports.pdfGenerate = async (req, res) => {
       });
       i++;
     });
+
+    i=0;
+    MatchQuestions.map((question)=>{
+      doc1.text(`Ans${i+1}.${question.answer}`).moveDown();
+      if(question.solution){
+        doc1.text(`Solution:${question.solution}`).moveDown();
+      }
+      i++;
+    })
+    doc1.end();
     doc.end();
   } catch (err) {
     console.log(err);
