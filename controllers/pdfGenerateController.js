@@ -5,7 +5,7 @@ const fs = require("fs");
 exports.pdfGenerate = async (req, res) => {
   try {
     const {matches , descriptives , Mcqs , difficulty, TF, subject, topics}= req.body;
-  
+    // console.log(req.body)
     var McqQuestions = [],
       MatchQuestions = [],
       descriptivesQuestion = [],
@@ -39,14 +39,17 @@ exports.pdfGenerate = async (req, res) => {
       }
     }
       var random = Math.floor(Math.random() * 5);
+      let topic = topics[Math.floor(Math.random()*(topics.length))]
+      console.log(topic)
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "MCQs",
         // Check this(atleast one topic match between arrays)
-        $match: { topics: { $in: topics } },
+        topics: topic,
         subject,
         verified: true
-      }).skip(random);
+      })
+      // }).skip(random);
       console.log(question);
       var findQues = McqQuestions.find((element) => element == question);
       if (findQues == undefined) {
@@ -85,10 +88,11 @@ exports.pdfGenerate = async (req, res) => {
       }
     
       var random = Math.floor(Math.random() * 5);
+      let topic = topics[Math.floor(Math.random()*(topics.length))]
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "descriptive",
-        $match: { topics: { $in: topics } },
+        topics: topic ,
         subject,
         verified: true
       }).skip(random);
@@ -131,10 +135,11 @@ exports.pdfGenerate = async (req, res) => {
       }
       
       var random = Math.floor(Math.random() * 5);
+      let topic = topics[Math.floor(Math.random()*(topics.length))]
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "Matches",
-        $match: { topics: { $in: topics } },
+        topics: topic ,
         subject,
         verified: true
       }).skip(random);
@@ -176,10 +181,11 @@ exports.pdfGenerate = async (req, res) => {
       }
       
       var random = Math.floor(Math.random() * 5);
+      let topic = topics[Math.floor(Math.random()*(topics.length))]
       const question = await Question.findOne({
         difficulty: difficultyLevel,
         questionType: "True/False",
-        $match: { topics: { $in: topics } },
+        topics: topic,
         subject,
         verified: true
       }).skip(random);

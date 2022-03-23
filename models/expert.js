@@ -8,6 +8,9 @@ const expertSchema = mongoose.Schema({
   email:{
       type:String,
       required:true
+    },
+    profilePic: {
+      type:String,
   },
   password:{
       type:String,
