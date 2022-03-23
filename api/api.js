@@ -10,6 +10,8 @@ const expertQuestionsRouter = require('./routes/getExpertQuestions.js');
 const subjectProviderRouter = require('./routes/getSubjectProvider')
 const freezeQuestionRouter = require('./routes/freezeQuestions');
 const editQuestionRouter = require('./routes/editQuestion');
+const editExpertDetailsRouter = require('./routes/editExpertDetails');
+api.use('/editExpertDetails',editExpertDetailsRouter);
 api.use('/expertQuestions',expertQuestionsRouter);
 api.use('/expertDetails',verifyJWT,expertDetailsRouter);
 api.use('/questions',addQuestionRouter);
