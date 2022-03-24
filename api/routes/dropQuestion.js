@@ -17,7 +17,7 @@ router.delete('/:qid', async(req, res) => {
         await Expert.findByIdAndUpdate(expID, {
             $pull: { questionsAssigned: qID }
         })
-        return res.status(201).json({
+        return res.status(200).json({
             message: "Question has been dropped successfully"
         })
     } catch (err) {

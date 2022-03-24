@@ -2,7 +2,7 @@ const getQuestionRouter = require('express').Router();
 const Question = require('../../models/question.js');
 
 getQuestionRouter.get('/ById/:id',async(req,res)=>{
-    try{
+  try {
       const question = await Question.findById(req.params.id);
       if(question)
         return res.status(200).json({question:question});
@@ -33,8 +33,11 @@ getQuestionRouter.post('/filter', async (req, res) => {
         })
       result = [...result,...questions]
     }
-    
-    // console.log(questions)
+    result = result.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+      // Check
+      t.id === value.id
+    )))
     return res.status(200).json({
       data: result.slice((page-1)*limit,page*limit)
     })

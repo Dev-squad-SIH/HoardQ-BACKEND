@@ -20,7 +20,7 @@ const expertSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question',
   }],
-  numberOfQuestionsVerified:{
+  totalVerified:{
       type:Number,
       default:0
   },

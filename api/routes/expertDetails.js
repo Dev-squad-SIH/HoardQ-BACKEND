@@ -1,9 +1,12 @@
 const expertDetailsRouter = require("express").Router();
 const Expert = require("../../models/expert.js");
 
-expertDetailsRouter.get("/ById/:id", async (req, res) => {
+expertDetailsRouter.get("/", async (req, res) => {
   try {
-    const expert = await Expert.findById(req.params.id);
+    const expertId = req.jwt_payload._id
+    const expert = await Expert.findById(expertId)
+      .select('-password')
+      .populate('questionsAssigned');
     if (expert) return res.status(200).json({ expert: expert });
     return res.status(400).json({ message: "Expert not founnd" });
   } catch (error) {
