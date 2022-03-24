@@ -38,7 +38,7 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
                     }
                 }
 
-                experts[index].questionsAssigned.push( question._id);
+                experts[index].questionsAssigned.unshift( question._id);
                 await experts[index].save();
                 return res.status(200).json({message:"Question added successfully"});
             }
