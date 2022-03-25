@@ -4,11 +4,11 @@ const fs = require("fs");
 
 exports.pdfGenerate = async (req, res) => {
   try {
-    const {matches , descriptives , Mcqs , difficulty, TF, subject, topics}= req.body;
+    const {matches , Mcqs , difficulty, TF, subject, topics}= req.body;
     // console.log(req.body)
     var McqQuestions = [],
       MatchQuestions = [],
-      descriptivesQuestion = [],
+      // descriptivesQuestion = [],
       TFQuestions = [];
 
     var difficultyLevel;
@@ -17,15 +17,15 @@ exports.pdfGenerate = async (req, res) => {
       if (i <= 0.4 * Mcqs) {
         difficultyLevel = "Easy";
       } else if (i > 0.4 * Mcqs && i <= 0.7 * Mcqs) {
-        difficultyLevel = "Medium";
+        difficultyLevel = "Moderate";
       } else {
         difficultyLevel = "Hard";
       }
-    }else if(difficulty=="Medium"){
+    }else if(difficulty=="Moderate"){
         if (i <= 0.3 * Mcqs) {
           difficultyLevel = "Easy";
         } else if (i > 0.3 * Mcqs && i <= 0.7 * Mcqs) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
@@ -33,15 +33,14 @@ exports.pdfGenerate = async (req, res) => {
       if (i <= 0.3 * Mcqs) {
         difficultyLevel = "Easy";
       } else if (i > 0.3 * Mcqs && i <= 0.6 * Mcqs) {
-        difficultyLevel = "Medium";
+        difficultyLevel = "Moderate";
       } else {
         difficultyLevel = "Hard";
       }
     }
-      var random = Math.floor(Math.random() * 5);
       let topic = topics[Math.floor(Math.random()*(topics.length))]
       console.log(topic)
-      const question = await Question.findOne({
+      const questions = await Question.find({
         difficulty: difficultyLevel,
         questionType: "MCQs",
         // Check this(atleast one topic match between arrays)
@@ -49,8 +48,11 @@ exports.pdfGenerate = async (req, res) => {
         subject,
         verified: true
       })
+      console.log(questions)
       // }).skip(random);
-      console.log(question);
+      var random = Math.floor(Math.random() * questions.length);
+      console.log(questions[random]);
+      const question = questions[random]
       var findQues = McqQuestions.find((element) => element == question);
       if (findQues == undefined) {
         if(question!=null){
@@ -60,67 +62,70 @@ exports.pdfGenerate = async (req, res) => {
         i--;
       }
     }
-    for (i = 0; i < descriptives; i++) {
-      if(difficulty=="Easy"){
-        if (i <= 0.4 * descriptives) {
-          difficultyLevel = "Easy";
-        } else if (i > 0.4 * descriptives && i <= 0.7 * descriptives) {
-          difficultyLevel = "Medium";
-        } else {
-          difficultyLevel = "Hard";
-        }
-      }else if(difficulty=="Medium"){
-        if (i <= 0.3 * descriptives) {
-          difficultyLevel = "Easy";
-        } else if (i > 0.3 * descriptives && i <= 0.7 * descriptives) {
-          difficultyLevel = "Medium";
-        } else {
-          difficultyLevel = "Hard";
-        }
-      }else{
-        if (i <= 0.3 * descriptives) {
-          difficultyLevel = "Easy";
-        } else if (i > 0.3 * descriptives && i <= 0.6 * descriptives) {
-          difficultyLevel = "Medium";
-        } else {
-          difficultyLevel = "Hard";
-        }
-      }
+    // for (i = 0; i < descriptives; i++) {
+    //   if(difficulty=="Easy"){
+    //     if (i <= 0.4 * descriptives) {
+    //       difficultyLevel = "Easy";
+    //     } else if (i > 0.4 * descriptives && i <= 0.7 * descriptives) {
+    //       difficultyLevel = "Medium";
+    //     } else {
+    //       difficultyLevel = "Hard";
+    //     }
+    //   }else if(difficulty=="Medium"){
+    //     if (i <= 0.3 * descriptives) {
+    //       difficultyLevel = "Easy";
+    //     } else if (i > 0.3 * descriptives && i <= 0.7 * descriptives) {
+    //       difficultyLevel = "Medium";
+    //     } else {
+    //       difficultyLevel = "Hard";
+    //     }
+    //   }else{
+    //     if (i <= 0.3 * descriptives) {
+    //       difficultyLevel = "Easy";
+    //     } else if (i > 0.3 * descriptives && i <= 0.6 * descriptives) {
+    //       difficultyLevel = "Medium";
+    //     } else {
+    //       difficultyLevel = "Hard";
+    //     }
+    //   }
     
-      var random = Math.floor(Math.random() * 5);
-      let topic = topics[Math.floor(Math.random()*(topics.length))]
-      const question = await Question.findOne({
-        difficulty: difficultyLevel,
-        questionType: "descriptive",
-        topics: topic ,
-        subject,
-        verified: true
-      }).skip(random);
-      var findQues = descriptivesQuestion.find(
-        (element) => element == question
-      );
-      if (findQues == undefined) {
-        if (question != null) {
-          descriptivesQuestion.push(question);
-        }
-      } else {
-        i--;
-      }
-    }
+    //   var random = Math.floor(Math.random() * 5);
+    //   let topic = topics[Math.floor(Math.random()*(topics.length))]
+    //   const questions = await Question.find({
+    //     difficulty: difficultyLevel,
+    //     questionType: "descriptive",
+    //     topics: topic ,
+    //     subject,
+    //     verified: true
+    //   })
+    //   var random = Math.floor(Math.random() * questions.length);
+    //   console.log(questions[random]);
+    //   const question = questions[random]
+    //   var findQues = descriptivesQuestion.find(
+    //     (element) => element == question
+    //   );
+    //   if (findQues == undefined) {
+    //     if (question != null) {
+    //       descriptivesQuestion.push(question);
+    //     }
+    //   } else {
+    //     i--;
+    //   }
+    // }
     for (i = 0; i < matches; i++) {
       if(difficulty=="Easy"){
         if (i <= 0.4 * matches) {
           difficultyLevel = "Easy";
         } else if (i > 0.4 * matches && i <= 0.7 * matches) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
-      }else if(difficulty=="Medium"){
+      }else if(difficulty=="Moderate"){
         if (i <= 0.3 * matches) {
           difficultyLevel = "Easy";
         } else if (i > 0.3 * matches && i <= 0.7 * matches) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
@@ -128,7 +133,7 @@ exports.pdfGenerate = async (req, res) => {
         if (i <= 0.3 * matches) {
           difficultyLevel = "Easy";
         } else if (i > 0.3 * matches && i <= 0.6 * matches) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
@@ -136,13 +141,17 @@ exports.pdfGenerate = async (req, res) => {
       
       var random = Math.floor(Math.random() * 5);
       let topic = topics[Math.floor(Math.random()*(topics.length))]
-      const question = await Question.findOne({
+      const questions = await Question.find({
         difficulty: difficultyLevel,
         questionType: "Matches",
         topics: topic ,
         subject,
         verified: true
-      }).skip(random);
+      })
+        // .skip(random);
+      var random = Math.floor(Math.random() * questions.length);
+      console.log(questions[random]);
+      const question = questions[random]
       var findQues = MatchQuestions.find((element) => element == question);
       if (findQues == undefined) {
         if (question != null) {
@@ -158,15 +167,15 @@ exports.pdfGenerate = async (req, res) => {
         if (i <= 0.4 * TF) {
           difficultyLevel = "Easy";
         } else if (i > 0.4 *TF && i <= 0.7 *TF) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
-      }else if(difficulty=="Medium"){
+      }else if(difficulty=="Moderate"){
         if (i <= 0.3 * TF) {
           difficultyLevel = "Easy";
         } else if (i > 0.3 *TF && i <= 0.7 *TF) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
@@ -174,7 +183,7 @@ exports.pdfGenerate = async (req, res) => {
         if (i <= 0.3 * TF) {
           difficultyLevel = "Easy";
         } else if (i > 0.3 *TF && i <= 0.6 *TF) {
-          difficultyLevel = "Medium";
+          difficultyLevel = "Moderate";
         } else {
           difficultyLevel = "Hard";
         }
@@ -182,13 +191,17 @@ exports.pdfGenerate = async (req, res) => {
       
       var random = Math.floor(Math.random() * 5);
       let topic = topics[Math.floor(Math.random()*(topics.length))]
-      const question = await Question.findOne({
+      const questions = await Question.find({
         difficulty: difficultyLevel,
         questionType: "True/False",
         topics: topic,
         subject,
         verified: true
-      }).skip(random);
+      })
+        // .skip(random);
+      var random = Math.floor(Math.random() * questions.length);
+      console.log(questions[random]);
+      const question = questions[random]
       var findQues = TFQuestions.find((element) => element == question);
       if (findQues == undefined) {
         if (question != null) {
@@ -240,35 +253,35 @@ exports.pdfGenerate = async (req, res) => {
       i++;
     });
 
-    //For descriptives:-
+    // //For descriptives:-
 
-    doc.text("Descriptive Section", {
-      width: 410,
-      align: "center",
-    });
+    // doc.text("Descriptive Section", {
+    //   width: 410,
+    //   align: "center",
+    // });
    
-    doc.moveDown();
+    // doc.moveDown();
 
-    doc1.text("Descriptive Section Solutions", {
-      width: 410,
-      align: "center",
-    });
+    // doc1.text("Descriptive Section Solutions", {
+    //   width: 410,
+    //   align: "center",
+    // });
    
-    doc1.moveDown();
-    i = 0;
-    descriptivesQuestion.map((question) => {
-      doc.text(`Q${i + 1}.${question.description}`).moveDown();
-      i++;
-    });
+    // doc1.moveDown();
+    // i = 0;
+    // descriptivesQuestion.map((question) => {
+    //   doc.text(`Q${i + 1}.${question.description}`).moveDown();
+    //   i++;
+    // });
 
-    i = 0;
-    descriptivesQuestion.map((question) => {
-      doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
-      if(question.solution){
-        doc1.text(`Solution:${question.solution}`).moveDown();
-      }
-      i++;
-    });
+    // i = 0;
+    // descriptivesQuestion.map((question) => {
+    //   doc1.text(`Ans${i + 1}.${question.answer}`).moveDown();
+    //   if(question.solution){
+    //     doc1.text(`Solution:${question.solution}`).moveDown();
+    //   }
+    //   i++;
+    // });
 
     //True/False Section:-
     doc.text("True/False Section", {
@@ -319,31 +332,44 @@ exports.pdfGenerate = async (req, res) => {
     MatchQuestions.map((question) => {
       doc.text(`Q${i + 1}.${question.description}`).moveDown();
       j = 0;
-      question.option.matchOptions.map((option) => {
+      let arr = [...question.option.matchOptions.rhs]
+      const shuffRHS = arr.sort((a, b) => 0.5 - Math.random());
+      [...Array(question.option.matchOptions.lhs.length).keys()].map((index) => {
         doc
           .text(
-            `${j + 1}.${
-              option.row.lhs
+            `${index + 1}.${
+              question.option.matchOptions.lhs[index]
             }                                                      ${
-              option.row.rhs
+              shuffRHS[index]
             }`
           )
           .moveDown();
-        j++;
-      });
+      })
+        
       i++;
-    });
+      });
 
-    // i=0;
-    // MatchQuestions.map((question)=>{
-    //   doc1.text(`Ans${i+1}.${question.answer}`).moveDown();
-    //   if(question.solution){
-    //     doc1.text(`Solution:${question.solution}`).moveDown();
-    //   }
-    //   i++;
-    // })
-    // doc1.end();
+    i=0;
+    MatchQuestions.map((question)=>{
+      doc1.text(`Q${i + 1}.${question.description}`).moveDown();
+      j = 0;
+      [...Array(question.option.matchOptions.lhs.length).keys()].map((index) => {
+        doc1
+          .text(
+            `${index + 1}.${
+              question.option.matchOptions.lhs[index]
+            }                                                      ${
+              question.option.matchOptions.rhs[index]
+            }`
+          )
+          .moveDown();
+      })
+        
+      i++;
+    })
+    doc1.end();
     doc.end();
+    
   } catch (err) {
     console.log(err);
   }
