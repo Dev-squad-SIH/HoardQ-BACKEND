@@ -2,12 +2,13 @@ const router = require('express').Router()
 const Question = require('../../models/question.js');
 const Expert = require('../../models/expert.js');
 
-router.put('/:qid', async(req, res) => {
+// Put request - req body is undefined(?)
+router.post('/:qid', async(req, res) => {
     try {
         const qID = req.params.qid
         const expID = req.jwt_payload._id
         const { topics, difficulty } = req.body
-            // Verify if the question is assigned to that expert
+        console.log(req.body)
         const { questionsAssigned, totalVerified } = await Expert.findById(expID)
         if (!questionsAssigned.includes(qID)) {
             return res.status(403).json({
