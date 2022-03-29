@@ -1,11 +1,12 @@
 {
   "name": "sih22-backend",
   "version": "1.0.0",
-  "description": "\"Smart India Hanckathon Project\"",
-  "main": "app.js",
+  "description": "\"Smart India Hackathon Project\"",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "dev": "nodemon index.js",
+    "start":"node index.js"
   },
   "repository": {
     "type": "git",
