@@ -1,6 +1,7 @@
 const addQuestionRouter = require('express').Router();
 const Question = require('../../models/question.js');
 const Expert = require('../../models/expert.js');
+const sendEmail = require('../../utils/sendEmail.js');
 
 addQuestionRouter.post('/add-question',async(req,res)=>{
     try{
@@ -39,8 +40,13 @@ addQuestionRouter.post('/add-question',async(req,res)=>{
                 }
 
                 experts[index].questionsAssigned.unshift( question._id);
+                await sendEmail({
+                    email:experts[0].email,
+                    subject:'Question Uploaded Notification',
+                    message:'A new Question is uploaded in HoardQ website. You can go and verify it'
+                })
                 await experts[index].save();
-                return res.status(200).json({message:"Question added successfully"});
+                return res.status(200).json({message:"Question added successfully and message has been sent to related expert"});
             }
             else{
                 return res.status(400).json({message:"Question type and options doesn't match"});
