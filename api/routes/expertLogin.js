@@ -9,7 +9,7 @@ loginRouter.post('/', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: 'Fill all the fields!',
       });
     }
