@@ -8,7 +8,7 @@ router.get('/options',async(req,res)=>{
         //  console.log(getSubjectProvider)
          res.status(200).json(getSubjectProvider[0]);
     }catch(err){
-        res.status(404).json({msg:"Internal Server Error"});
+        res.status(500).json({msg:"Internal Server Error"});
     }
 })
 module.exports=router;

@@ -2,7 +2,6 @@ const router = require('express').Router()
 const Question = require('../../models/question.js');
 const Expert = require('../../models/expert.js');
 
-// Put request - req body is undefined(?)
 router.post('/:qid', async(req, res) => {
     try {
         const qID = req.params.qid

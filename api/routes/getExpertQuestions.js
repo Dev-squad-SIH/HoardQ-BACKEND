@@ -7,7 +7,7 @@ expertQuestionsRouter.get('/:id',async(req,res)=>{
       const expert = await Expert.findById(req.params.id).populate('questionsAssigned').select('-password');
       if(expert)
         return res.status(200).json({expert:expert});
-      return res.status(400).json({message:"Questions not found"});
+      return res.status(404).json({message:"Questions not found"});
     }catch(error)
     {
         console.log(error.message);

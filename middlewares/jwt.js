@@ -21,7 +21,6 @@ const verifyJWT = (req, res, next) => {
 
       return next();
     });
-    return null;
   } catch (err) {
     console.log(err.message);
     return res.status(500).json({

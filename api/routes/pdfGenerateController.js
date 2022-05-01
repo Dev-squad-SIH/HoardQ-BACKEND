@@ -1,8 +1,9 @@
-const Question = require("../models/question");
+const router = require('express').Router()
+const Question = require("../../models/question");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 
-exports.pdfGenerate = async(req, res) => {
+router.post('/', async(req, res) => {
     try {
         const { matches, Mcqs, difficulty, TF, subject, topics } = req.body;
         // console.log(req.body)
@@ -403,4 +404,5 @@ exports.pdfGenerate = async(req, res) => {
             message: err.message
         })
     }
-};
+})
+module.exports = router
