@@ -1,8 +1,11 @@
 {
   "name": "sih22-backend",
   "version": "1.0.0",
-  "description": "\"Smart India Hanckathon Project\"",
+  "description": "\"Smart India Hackathon Project\"",
   "main": "app.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js"
@@ -28,7 +31,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.6",
     "nodemailer": "^6.7.2",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.16",
     "pdfkit": "^0.13.0"
   }
 }
